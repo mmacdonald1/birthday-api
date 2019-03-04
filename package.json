@@ -1,0 +1,15 @@
+{
+  "name": "birthday-api",
+  "version": "1.0.0",
+  "description": "Stores birthdays you want to remember",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Melanie MacDonald",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
