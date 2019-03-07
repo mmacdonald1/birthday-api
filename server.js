@@ -1,7 +1,9 @@
 // dependecies and global variables
 const express = require('express')
 const app =  express()
+const bodyParser = require('body-parser')
 const port = process.env.PORT || 3000
+let nextBirthdayId = 3
 const birthdays = [{
   'id':1,
   'name':'Kevin',
@@ -21,7 +23,7 @@ const birthdays = [{
   'birthday':'05-21-1994'
 },
 ]
-
+app.use(bodyParser.json())
 app.use(express.static(__dirname + '/public'))
 
 app.get('/birthdays', (req,res)=>{
@@ -32,6 +34,13 @@ app.get('/birthdays/:id', (req,res)=>{
   let birthdayId =  parseInt(req.params.id)
   let birthdayPerson = birthdays.filter(birthday => birthday.id === birthdayId)
   birthdayPerson ? res.json(birthdayPerson) :  res.status(404).send()
+})
+
+app.post('/birthdays', (req,res)=>{
+  let body = req.body;
+  body.id = nextBirthdayId++
+  birthdays.push(body)
+  res.json(body)
 })
 
 app.listen(port, ()=>console.log(`Listening on port ${port}`))
