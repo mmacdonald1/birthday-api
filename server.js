@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000
 
 // data
 let nextBirthdayId = 3
-const birthdays = [{
+let birthdays = [{
   'id':1,
   'name':'Kevin',
   'phone':'222-222-2222',
@@ -42,13 +42,28 @@ app.get('/birthdays/:id', (req,res)=>{
   birthdayPerson ? res.json(birthdayPerson) :  res.status(404).send()
 })
 
+function isString(value){
+  return typeof value === 'string' || value instanceof String
+}
 //Post a birthday
 app.post('/birthdays', (req,res)=>{
   let body = req.body;
-  body.id = nextBirthdayId++
-  birthdays.push(body)
-  res.json(body)
+    if(!isString(body.name) || !isString(body.phone) || !isString(body.birthday)){
+      res.status(400).send()
+    }
+    body.id = nextBirthdayId++
+    birthdays.push(body)
+    res.json(body)
 })
 
-//telling app which port to run on 
+// Delete /birthdays/:id
+app.delete('/birthdays/:id',(req, res) => {
+  let birthdayId =  parseInt(req.params.id)
+  let birthdayPerson = birthdays.filter(birthday => birthday.id === birthdayId)
+  birthdays = birthdays.filter(birthday => birthday.id !== birthdayId)
+  console.log(birthdays)
+  birthdayPerson ? res.json(birthdayPerson) :  res.status(404).send();
+})
+
+//telling app which port to run on
 app.listen(port, ()=>console.log(`Listening on port ${port}`))
