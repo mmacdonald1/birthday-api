@@ -72,5 +72,22 @@ app.delete("/birthdays/:id", (req, res) => {
   birthdayPerson ? res.json(birthdayPerson) : res.status(404).send();
 });
 
+// Put /birthdays/:id
+app.put("/birthdays/:id", (req, res) => {
+  let birthdayId = parseInt(req.params.id);
+  let birthdayPerson = birthdays.filter(birthday => birthday.id === birthdayId);
+
+  let indexToUpdate = birthdays.indexOf(birthdayPerson);
+  let updatedPerson = {
+    id: req.params.id,
+    name: req.body.name,
+    phone: req.body.phone,
+    birthday: req.body.birthday
+  };
+
+  // manipulates birthdays. will not work with postgresql
+  birthdays.splice(indexToUpdate, 1, updatedPerson);
+});
+
 //telling app which port to run on
 app.listen(port, () => console.log(`Listening on port ${port}`));
